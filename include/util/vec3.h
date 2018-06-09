@@ -43,12 +43,12 @@ class Vec3
         inline Vec3& operator*=( const float f);
         inline Vec3& operator/=( const float f);
 
-        inline float lenght(void) const {return (sqrt(e[0]*e[0] + e[1]*e[1] + e[2]*e[2]));}
-        inline float squared_length(void) const {return (e[0]*e[0] + e[1]*e[1] + e[2]*e[2]);}
+        inline float lenght() const {return (sqrt(e[0]*e[0] + e[1]*e[1] + e[2]*e[2]));}
+        inline float squared_length() const {return (e[0]*e[0] + e[1]*e[1] + e[2]*e[2]);}
         inline float dot(const Vec3 & v1, const Vec3 & v2);
         inline Vec3 cross(const Vec3 & v1, const Vec3 & v2);
-        inline Vec3 unit_vector(const Vec3 & v);
-        inline void make_unit_vector(void);
+        static inline Vec3 unit_vector(const Vec3 & v);
+        inline void make_unit_vector();
         inline Vec3 min(const Vec3& v1, const Vec3& v2);
         inline Vec3 max(const Vec3& v1, const Vec3& v2);
 
@@ -56,7 +56,7 @@ class Vec3
         float e[3];
 };
 
-typedef Vec3 point3;
+typedef Vec3 Point3;
 
 #include "vec3.inl"
 
