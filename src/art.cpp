@@ -1,6 +1,7 @@
 #include <iostream>
 #include <omp.h>
 #include "util/image.cpp"
+#include "util/blue.cpp"
 #include "shape/sphere.cpp"
 #include "../include/util/vec3.h"
 #include "../include/util/ray.h"
@@ -16,6 +17,8 @@ Vec3 color (const Ray& r, SurfaceList *world){
 		return (1-t)*Vec3(1, 1, 1) + t*Vec3(0.5, 0.7, 1);
 	}	
 }
+
+int ns = 8;
 
 int main (int argc, char* argv[]){
     
@@ -36,13 +39,18 @@ int main (int argc, char* argv[]){
     #pragma omp parallel for
     for (int j = ny - 1; j >= 0; j--){
         int y = j + .5;
-        float v = y / float(ny);
         for (int i = 0; i < nx; i++){
             int x = i + .5;
-            float u = x/ float(nx);
-            Ray r(origin, lower_left_corner + u*horizontal + v*vertical);
+            float *samples = Blue::get(ns);
+            Vec3 c;
+            for (int n = 0; n < ns; n++){
+                float v = (y + samples[n*2 + 1]) / float(ny);
+                float u = (x + + samples[n*2]) / float(nx);
+                Ray r(origin, lower_left_corner + u*horizontal + v*vertical);
 
-            Vec3 c = color(r, world);
+                c = c + color(r, world);
+            }
+            c = c/ns;
             img(i, ny - j - 1) = Color3f(c[0], c[1], c[2]);
         }
     }
