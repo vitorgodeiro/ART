@@ -4,7 +4,7 @@
 #include "shape/sphere.cpp"
 #include "../include/util/vec3.h"
 #include "../include/util/ray.h"
-#include "../include/shape/surface_list.h"
+#include "shape/surface_list.cpp"
 
 Vec3 color (const Ray& r, SurfaceList *world){
 	Hit rec;

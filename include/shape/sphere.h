@@ -29,7 +29,7 @@ public:
     Sphere (Vec3 c, float r); 
 	
 	/** 
-	* @brief The construtor specifies a Sphere class.
+	* @brief Check if ray hit sphere
 	* @param r 
 	* @param t_min 
 	* @param t_max
