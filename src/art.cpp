@@ -6,6 +6,7 @@
 #include "../include/util/vec3.h"
 #include "../include/util/ray.h"
 #include "shape/surface_list.cpp"
+#include "material/lambertian.cpp"
 
 Vec3 color (const Ray& r, SurfaceList *world){
 	Hit rec;

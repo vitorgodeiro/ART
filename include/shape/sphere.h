@@ -40,6 +40,7 @@ public:
 
     Vec3 center;
     float radius;
+    
 };
 
 #endif
