@@ -34,22 +34,52 @@ int ns = 64;
 
 int main (int argc, char* argv[]){
     
-    int nx = 800;
-    int ny = 400;
+    int nx = 1200;
+    int ny = 800;
 
     Image img (nx, ny);
-
-    Vec3 lower_left_corner (-2, -1, -1);
-    Vec3 horizontal (4, 0, 0);
-    Vec3 vertical (0, 2, 0);
-    Vec3 origin (0, 0, 0);
     
     SurfaceList *world = new SurfaceList();
-    world->list.push_back(new Sphere(Vec3(0,-100.5,-1), 100, new Lambertian (Vec3(0.8, 0.8, 0.0))));
+    
+    /*world->list.push_back(new Sphere(Vec3(0,-100.5,-1), 100, new Lambertian (Vec3(0.8, 0.8, 0.0))));
     world->list.push_back(new Sphere(Vec3(0,0,-1), 0.5, new Lambertian (Vec3(0.8, 0.3, 0.3))));
     world->list.push_back(new Sphere(Vec3(1,0,-1), 0.5, new Metal(Vec3(0.8, 0.6, 0.2), 0)));
-    world->list.push_back(new Sphere(Vec3(-1,0,-1), 0.45, new Dielectric(1.5)));
-   	Camera cam(Vec3(-2,2,1), Vec3(0,0,-1), Vec3(0,1,0), 90, float(nx)/float(ny));
+    world->list.push_back(new Sphere(Vec3(-1,0,-1), 0.45, new Dielectric(1.5)));*/
+
+    int n = 500;
+    world->list.push_back(new Sphere(Vec3(0,-1000,0), 1000, new Lambertian(Vec3(0.5, 0.5, 0.5))));
+    int i = 1;
+
+    for (int a = -11; a < 11; a++) {
+        for (int b = -11; b < 11; b++) {
+            float choose_mat = drand48();
+            Vec3 center(a+0.9*drand48(),0.2,b+0.9*drand48()); 
+            if ((center-Vec3(4,0.2,0)).length() > 0.9) { 
+                if (choose_mat < 0.8) {  // diffuse
+                    world->list.push_back(new Sphere(center, 0.2, new Lambertian(Vec3(drand48()*drand48(), drand48()*drand48(), drand48()*drand48()))));
+                }
+                else if (choose_mat < 0.95) { // metal
+                    world->list.push_back(new Sphere(center, 0.2,
+                            new Metal(Vec3(0.5*(1 + drand48()), 0.5*(1 + drand48()), 0.5*(1 + drand48())),  0.5*drand48())));
+                }
+                else {  // glass
+                    world->list.push_back(new Sphere(center, 0.2, new Dielectric(1.5)));
+                }
+            }
+        }
+	}
+
+	world->list.push_back(new Sphere(Vec3(0, 1, 0), 1.0, new Dielectric(1.5)));
+    world->list.push_back(new Sphere(Vec3(-4, 1, 0), 1.0, new Lambertian(Vec3(0.4, 0.2, 0.1))));
+    world->list.push_back(new Sphere(Vec3(4, 1, 0), 1.0, new Metal(Vec3(0.7, 0.6, 0.5), 0.0)));
+
+
+
+    Vec3 lookfrom (-2, 2, 1);
+    Vec3 lookat (0, 0, -1);
+    float dist_to_focus = (lookfrom - lookat).length();
+    float aperture = 2.0;
+   	Camera cam(lookfrom, lookat, Vec3(0,1,0), 90, float(nx)/float(ny), aperture, dist_to_focus);
 
     #pragma omp parallel for
     for (int j = ny - 1; j >= 0; j--){
@@ -61,12 +91,12 @@ int main (int argc, char* argv[]){
             for (int n = 0; n < ns; n++){
                 float v = (y + samples[n*2 + 1]) / float(ny);
                 float u = (x + samples[n*2]) / float(nx);
-                Ray r(origin, lower_left_corner + u*horizontal + v*vertical);
+                Ray r = cam.get_ray (u, v);
 
                 c = c + color(r, world, 0);
             }
             c = c/ns;
-            img(i, ny - j - 1) = Color3f(sqrt(c[0]), sqrt(c[1]), sqrt(c[2]));
+            img(i, j) = Color3f(sqrt(c[0]), sqrt(c[1]), sqrt(c[2]));
         }
     }
 

@@ -19,13 +19,13 @@ bool Dielectric::scatter(const Ray& r_in, const Hit& rec, Vec3& attenuation, Ray
 	if (Vec3::dot(r_in.get_direction(), rec.normal) > 0.000001) {
 	  outward_normal = -rec.normal;
 	  ni_over_nt = ref_idx;
-	  cosine = Vec3::dot(r_in.get_direction(), rec.normal) / r_in.get_direction().lenght();
+	  cosine = Vec3::dot(r_in.get_direction(), rec.normal) / r_in.get_direction().length();
 	  cosine = sqrt(1 - ref_idx*ref_idx*(1-cosine*cosine));
 	}
 	else {
 	  outward_normal = rec.normal;
 	  ni_over_nt = 1.0 / ref_idx;
-	  cosine = -Vec3::dot(r_in.get_direction(), rec.normal) / r_in.get_direction().lenght();
+	  cosine = -Vec3::dot(r_in.get_direction(), rec.normal) / r_in.get_direction().length();
 	}
 	if (refract(r_in.get_direction(), outward_normal, ni_over_nt, refracted)) 
 	reflect_prob = schlick(cosine, ref_idx);

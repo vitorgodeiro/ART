@@ -80,7 +80,7 @@ inline Vec3 Vec3::cross( const Vec3 & v1, const Vec3 & v2 ) {
 }
 
 inline Vec3 Vec3::unit_vector( const Vec3 & v ) {
-    return v/v.lenght();
+    return v/v.length();
 }
 
 inline void Vec3::make_unit_vector( ) {

@@ -43,7 +43,7 @@ class Vec3
         inline Vec3& operator*=( const float f);
         inline Vec3& operator/=( const float f);
 
-        inline float lenght() const {return (sqrt(e[0]*e[0] + e[1]*e[1] + e[2]*e[2]));}
+        inline float length() const {return (sqrt(e[0]*e[0] + e[1]*e[1] + e[2]*e[2]));}
         inline float squared_length() const {return (e[0]*e[0] + e[1]*e[1] + e[2]*e[2]);}
         static inline float dot(const Vec3 & v1, const Vec3 & v2);
         static inline Vec3 cross(const Vec3 & v1, const Vec3 & v2);
