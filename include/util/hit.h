@@ -10,11 +10,16 @@
 
 #include "vec3.h"
 
+class Material;
+
 struct Hit
 {
     float t;
     Point3 point;
     Vec3 normal;    
+    Material *mat_ptr;
 };
+
+#include "../material/material.h"
 
 #endif

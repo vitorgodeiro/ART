@@ -9,6 +9,7 @@
 #define _SPHERE_H_
 
 #include "surface.h" 
+#include "../material/material.h"
 
 /** 
 * @class Sphere
@@ -26,7 +27,7 @@ public:
 	* center of the sphere
 	* @param r is one float that have radius of the sphere
 	*/
-    Sphere (Vec3 c, float r); 
+    Sphere (Vec3 c, float r, Material *m); 
 	
 	/** 
 	* @brief Check if ray hit sphere
@@ -40,6 +41,7 @@ public:
 
     Vec3 center;
     float radius;
+    Material *mat_ptr;
     
 };
 
