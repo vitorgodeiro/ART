@@ -1,6 +1,6 @@
 # ART
 <p align="center">
-  <img src="https://github.com/vitorgodeiro/ART/blob/master/result.png" width="400"><center>
+  <img src="https://github.com/vitorgodeiro/ART/blob/master/result.png" ><center>
 </p>
 
  **A**wesome **R**ay **T**racing (ART) is an 3D image renderer that use Ray tracing techniques .  
