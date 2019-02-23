@@ -17,6 +17,9 @@
 */
 class Image {
 public:
+	/** @brief The construtor specifies a image class.*/
+    Image();
+
     /** @brief The construtor specifies a image class.*/
     Image(int width, int height);
 

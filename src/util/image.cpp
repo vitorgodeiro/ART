@@ -7,6 +7,10 @@
 #include "../../include/util/image.h"
 #include <fstream>
 
+Image::Image() : _width(1), _height(1) {
+	this->_data = new Color3f[_width*_height];
+}
+
 Image::Image(int width, int height) : _width(width), _height(height) {
 	this->_data = new Color3f[width*height];
 }
