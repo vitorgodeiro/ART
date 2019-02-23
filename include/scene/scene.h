@@ -10,6 +10,7 @@
 #include <limits>
 
 #include "../../src/util/image.cpp"
+#include "../../src/util/barProgress.cpp"
 #include "../../src/shape/surface_list.cpp"
 
 #include "camera.h"

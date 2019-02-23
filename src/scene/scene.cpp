@@ -36,7 +36,8 @@ void Scene::accelerate(){
 Image Scene::render(){
 	auto start = std::chrono::steady_clock::now();
     Image img (nx, ny);
-
+    BarProgress bar (70, ny);
+    bar.generateBarProgress();
 	#pragma omp parallel for
     for (int j = ny - 1; j >= 0; j--){
         int y = j + .5;
@@ -53,12 +54,12 @@ Image Scene::render(){
                 c = c + sample(r, 0);
             }
             c = c/ns;
-
             img(i, j) = Color3f(sqrt(c[0]), sqrt(c[1]), sqrt(c[2]));
         }
+        bar.updateContUpgrade();
     }
     auto end = std::chrono::steady_clock::now();
-    std::cout << "Rendering in " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
+    std::cout << "\nRendering in " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms" << std::endl;
 
     return img;
 }
