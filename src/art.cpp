@@ -1,10 +1,10 @@
 #include <iostream>
 #include <omp.h>
+#include <limits>
+
 #include "util/image.cpp"
 #include "util/blue.cpp"
 #include "shape/sphere.cpp"
-#include "../include/util/vec3.h"
-#include "../include/util/ray.h"
 #include "shape/surface_list.cpp"
 #include "material/lambertian.cpp"
 #include "material/metal.cpp"
@@ -13,7 +13,7 @@
 
 Vec3 color (const Ray& r, SurfaceList *world, int depth){
 	Hit rec;
-	if (world->hit(r, 0.0, 1000, rec)){
+	if (world->hit(r, 0.001, std::numeric_limits<float>::max(), rec)){
 		Ray scattered;
 		Vec3 attenuation;
 		if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)){
@@ -41,11 +41,6 @@ int main (int argc, char* argv[]){
     
     SurfaceList *world = new SurfaceList();
     
-    /*world->list.push_back(new Sphere(Vec3(0,-100.5,-1), 100, new Lambertian (Vec3(0.8, 0.8, 0.0))));
-    world->list.push_back(new Sphere(Vec3(0,0,-1), 0.5, new Lambertian (Vec3(0.8, 0.3, 0.3))));
-    world->list.push_back(new Sphere(Vec3(1,0,-1), 0.5, new Metal(Vec3(0.8, 0.6, 0.2), 0)));
-    world->list.push_back(new Sphere(Vec3(-1,0,-1), 0.45, new Dielectric(1.5)));*/
-
     int n = 500;
     world->list.push_back(new Sphere(Vec3(0,-1000,0), 1000, new Lambertian(Vec3(0.5, 0.5, 0.5))));
     int i = 1;
@@ -75,11 +70,11 @@ int main (int argc, char* argv[]){
 
 
 
-    Vec3 lookfrom (-2, 2, 1);
-    Vec3 lookat (0, 0, -1);
-    float dist_to_focus = (lookfrom - lookat).length();
-    float aperture = 2.0;
-   	Camera cam(lookfrom, lookat, Vec3(0,1,0), 90, float(nx)/float(ny), aperture, dist_to_focus);
+    Vec3 lookfrom (13,2,3);
+    Vec3 lookat (0, 0, 0);
+    float dist_to_focus = 10.0;//(lookfrom - lookat).length();
+    float aperture = 0.1;
+   	Camera cam(lookfrom, lookat, Vec3(0,1,0), 20, float(nx)/float(ny), aperture, dist_to_focus);
 
     #pragma omp parallel for
     for (int j = ny - 1; j >= 0; j--){
@@ -88,6 +83,7 @@ int main (int argc, char* argv[]){
         for (int i = 0; i < nx; i++){
             int x = i + .5;
             Vec3 c;
+            
             for (int n = 0; n < ns; n++){
                 float v = (y + samples[n*2 + 1]) / float(ny);
                 float u = (x + samples[n*2]) / float(nx);

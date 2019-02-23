@@ -3,6 +3,14 @@
 
 #include "../util/ray.h" 
 
+Vec3 random_in_unit_disk() {
+  Vec3 p;
+  do {
+      p = 2.0*Vec3(drand48(),drand48(),0) - Vec3(1,1,0);
+  } while (Vec3::dot(p,p) >= 1.0);
+  return p;
+}
+
 class Camera  {
   public:
     Camera(Vec3 lookfrom, Vec3 lookat, Vec3 vup, float vfov, float aspect, float aperture, float focus_dist) { 
@@ -14,12 +22,16 @@ class Camera  {
       w = Vec3::unit_vector(lookfrom - lookat);
       u = Vec3::unit_vector(Vec3::cross(vup, w));
       v = Vec3::cross(w, u);
-      lower_left_corner = origin  - half_width*focus_dist*u -half_height*focus_dist*v - w*focus_dist;
+      lower_left_corner = origin  - half_width*focus_dist*u -half_height*focus_dist*v - focus_dist*w;
       horizontal = 2*half_width*focus_dist*u;
       vertical = 2*half_height*focus_dist*v;
     }
 
-    Ray get_ray(float u, float v) { return Ray(origin, lower_left_corner + u*horizontal + (1 - v)*vertical); }
+    Ray get_ray(float s, float t) { 
+      Vec3 rd = lens_radius*random_in_unit_disk();
+      Vec3 offset = u * rd.x() + v * rd.y();
+      return Ray(origin + offset, lower_left_corner + s*horizontal + (1-t)*vertical - origin - offset); 
+    }
 
     Vec3 origin;
     Vec3 lower_left_corner;
